@@ -13,7 +13,6 @@ module.exports = {
   guildId: getEnv("DISCORD_GUILD_ID"),
   autoSyncCommands: getEnv("AUTO_SYNC_COMMANDS", "true").toLowerCase() === "true",
   youtubeCookie: getEnv("YOUTUBE_COOKIE"),
-  youtubeCookiesFile: getEnv("YOUTUBE_COOKIES_FILE"),
   spotifyClientId: getEnv("SPOTIFY_CLIENT_ID"),
   spotifyClientSecret: getEnv("SPOTIFY_CLIENT_SECRET")
 };

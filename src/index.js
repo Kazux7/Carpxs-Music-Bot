@@ -5,7 +5,6 @@ const {
   guildId,
   autoSyncCommands,
   youtubeCookie,
-  youtubeCookiesFile,
   spotifyClientId,
   spotifyClientSecret
 } = require("./config");
@@ -29,8 +28,7 @@ function getGuildPlayer(guildId) {
     players.set(
       guildId,
       new GuildMusicPlayer(guildId, spotifyService, {
-        youtubeCookie,
-        youtubeCookiesFile
+        youtubeCookie
       })
     );
   }
@@ -149,9 +147,8 @@ client.once("clientReady", async () => {
   if (!spotifyService.isEnabled()) {
     console.log("Spotify désactivé (SPOTIFY_CLIENT_ID/SECRET absents).");
   }
-  if (!youtubeCookie && !youtubeCookiesFile) {
-    console.log("YouTube cookies absents: certaines lectures YouTube peuvent être bloquées.");
-    console.log("Conseil: utilise YOUTUBE_COOKIES_FILE (cookies.txt Netscape) dans .env.");
+  if (!youtubeCookie) {
+    console.log("YouTube raw cookie absent: fallback browser cookies automatique active.");
   }
 
   if (autoSyncCommands) {

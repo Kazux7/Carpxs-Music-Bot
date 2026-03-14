@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js",
-    "sync:commands": "node src/sync-commands.js"
+    "sync:commands": "node src/sync-commands.js",
+    "postinstall": "node scripts/postinstall-setup.js"
   },
   "engines": {
     "node": ">=20"

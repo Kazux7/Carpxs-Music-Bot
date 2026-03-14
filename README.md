@@ -1,16 +1,19 @@
 # Carpxs Music Bot
 
-Bot musique Discord en Node.js avec:
-- Recherche directe par titre (pas besoin de lien)
-- Lecture YouTube
-- Support Spotify (liens Spotify + recherche Spotify forcée)
-- Slash commands (/play, /skip, etc.) + sync auto/manuelle
-- File d'attente, skip, pause, reprise, now playing
+A complete Discord music bot built with Node.js.
 
-## 1) Prérequis
+Key features:
+- Search and play by title (no link required)
+- YouTube playback
+- Spotify support (track links + forced Spotify search)
+- Slash commands with auto sync
+- Queue management and advanced DJ controls
+- Bilingual server mode (French/English)
+
+## 1) Requirements
 
 - Node.js 20+
-- Un bot Discord avec l'intent Guild Voice States activé
+- A Discord bot with Guild Voice States intent enabled
 
 ## 2) Installation
 
@@ -18,92 +21,91 @@ Bot musique Discord en Node.js avec:
 npm install
 ```
 
-Copie `.env.example` en `.env` puis remplis:
+npm install automatically creates .env from .env.example if missing.
+
+Then set your environment values in .env:
 
 ```env
-DISCORD_TOKEN=ton_token_discord
-DISCORD_CLIENT_ID=application_id_du_bot
-DISCORD_GUILD_ID=id_serveur_pour_sync_rapide
+DISCORD_TOKEN=your_discord_token
+DISCORD_CLIENT_ID=your_bot_application_id
+DISCORD_GUILD_ID=your_test_server_id
 AUTO_SYNC_COMMANDS=true
 YOUTUBE_COOKIE=
-YOUTUBE_COOKIES_FILE=
-SPOTIFY_CLIENT_ID=ton_client_id
-SPOTIFY_CLIENT_SECRET=ton_client_secret
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 ```
 
-`SPOTIFY_CLIENT_ID` et `SPOTIFY_CLIENT_SECRET` sont obligatoires pour les recherches Spotify.
-Sans ça, le bot fonctionne quand même en recherche YouTube.
+Notes:
+- SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET are recommended for full Spotify support.
+- DISCORD_GUILD_ID is recommended for fast guild command updates.
 
-`DISCORD_GUILD_ID` est fortement recommandé: les slash commands sont synchronisées quasi instantanément sur ce serveur.
-Si tu laisses vide, la sync sera globale (plus lente a apparaître).
+YouTube playback uses yt-dlp + ffmpeg.
+The bot uses cookies from your local Chrome profile automatically.
 
-Lecture YouTube utilise `yt-dlp` + `ffmpeg`.
-Le bot tente automatiquement `--cookies-from-browser chrome` si necessaire.
+Optional fallback:
+- YOUTUBE_COOKIE: raw Cookie header fallback (only if needed)
 
-Si besoin:
-- `YOUTUBE_COOKIES_FILE`: chemin vers un fichier cookies au format Netscape pour yt-dlp.
-- `YOUTUBE_COOKIE`: fallback ancien format (header Cookie brut).
-
-## 3) Lancer le bot
+## 3) Run
 
 ```bash
 npm start
 ```
 
-## 4) Sync des slash commands
+Minimal workflow:
+- npm install
+- npm start
 
-- Sync auto au démarrage: contrôlée par `AUTO_SYNC_COMMANDS` (true/false)
-- Sync manuelle: 
+## 4) Slash Command Sync
+
+- Auto sync on startup: controlled by AUTO_SYNC_COMMANDS
+- Manual sync:
 
 ```bash
 npm run sync:commands
 ```
 
-## 5) Commandes
+## 5) Commands
 
-- `/play recherche:<titre>`: recherche YouTube et lance le morceau
-- `/play recherche:<lien youtube>`: lit un lien YouTube
-- `/play recherche:<lien spotify>`: récupère le morceau Spotify et le joue via source audio YouTube
-- `/play recherche:sp <titre>`: force une recherche Spotify, puis lecture
-- `/join`: connecte le bot à ton vocal
-- `/skip`: passe au morceau suivant
-- `/previous`: relance le morceau precedent
-- `/pause`: met en pause
-- `/resume`: reprend
-- `/queue`: affiche la file
-- `/np`: affiche le morceau en cours
-- `/stats`: affiche les stats du player
-- `/shuffle`: mélange la file
-- `/clear`: vide la file
-- `/remove position:<n>`: supprime un morceau de la file
-- `/jump position:<n>`: joue directement un morceau de la file
-- `/move from:<n> to:<n>`: deplace un morceau
-- `/swap a:<n> b:<n>`: echange deux morceaux
-- `/volume pourcent:<0-200>`: règle le volume
-- `/loop mode:<off|track|queue>`: mode répétition
-- `/language lang:<fr|en>`: change la langue du bot pour le serveur
-- `/stop`: stop et vide la file
-- `/leave`: déconnecte le bot du vocal
-- `/help`: affiche les commandes
+- /play recherche:<title or link> - Play from title, YouTube link, or Spotify track link
+- /join - Join your voice channel
+- /leave - Leave voice channel
+- /skip - Skip current track
+- /previous - Replay previous track
+- /pause - Pause playback
+- /resume - Resume playback
+- /stop - Stop playback and clear queue
+- /queue - Show queue
+- /np - Show now playing
+- /stats - Show player stats
+- /shuffle - Shuffle queue
+- /clear - Clear queue
+- /remove position:<n> - Remove queue item
+- /jump position:<n> - Jump directly to queue item
+- /move from:<n> to:<n> - Move queue item
+- /swap a:<n> b:<n> - Swap two queue items
+- /volume pourcent:<0-200> - Set volume
+- /loop mode:<off|track|queue> - Set loop mode
+- /language lang:<fr|en> - Set server language
+- /help - Show command help
 
-Le bot repond en embeds et prend en charge FR/EN par serveur.
+Responses are embed-based and localized per server.
 
-## 6) Notes importantes
+## 6) Important Notes
 
-- Spotify ne fournit pas de stream audio complet via son API publique pour ce type de bot.
-- Le bot utilise donc Spotify pour identifier les morceaux, puis joue une source YouTube correspondante.
-- Pour de meilleures performances, héberge le bot sur une machine stable (VPS/PC allumé en continu).
+- Spotify public API does not provide direct full audio streaming for this bot use case.
+- Spotify tracks are resolved to playable YouTube sources.
+- For best stability, run the bot on a machine that stays online.
 
-## 7) Depannage YouTube
+## 7) YouTube Troubleshooting
 
-Si le bot affiche "Erreur de lecture" avec un message de formats non lisibles:
+If playback fails with format-related errors:
 
-1. Exporte tes cookies YouTube dans un fichier Netscape (extension navigateur type "Get cookies.txt LOCALLY").
-2. Cree un fichier `youtube-cookies.txt` a la racine du projet.
-3. Mets dans `.env`:
+1. Make sure Chrome is installed and logged in to YouTube on this machine.
+2. Retry playback (the bot uses browser cookies automatically).
+3. If still blocked, set a raw cookie header in .env:
 
 ```env
-YOUTUBE_COOKIES_FILE=./youtube-cookies.txt
+YOUTUBE_COOKIE=your_full_cookie_header
 ```
 
-4. Redemarre le bot avec `npm start`.
+4. Restart the bot with npm start.

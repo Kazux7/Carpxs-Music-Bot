@@ -21,7 +21,6 @@ class GuildMusicPlayer {
     this.guildId = guildId;
     this.spotifyService = spotifyService;
     this.youtubeCookie = String(options.youtubeCookie || "").trim();
-    this.youtubeCookiesFile = String(options.youtubeCookiesFile || "").trim();
     this.queue = [];
     this.current = null;
     this.history = [];
@@ -348,13 +347,6 @@ class GuildMusicPlayer {
   getYtDlpOptionSets() {
     const options = [[]];
     options.push(["--cookies-from-browser", "chrome"]);
-
-    if (this.youtubeCookiesFile) {
-      const resolvedPath = path.isAbsolute(this.youtubeCookiesFile)
-        ? this.youtubeCookiesFile
-        : path.resolve(process.cwd(), this.youtubeCookiesFile);
-      options.push(["--cookies", resolvedPath]);
-    }
 
     if (this.youtubeCookie) {
       options.push(["--add-header", `Cookie:${this.youtubeCookie}`]);
