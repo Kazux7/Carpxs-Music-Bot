@@ -1,0 +1,33 @@
+{
+  "name": "carpxs-music-bot",
+  "version": "1.0.0",
+  "description": "Bot Discord musique Node.js avec recherche YouTube/Spotify",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "sync:commands": "node src/sync-commands.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "discord",
+    "music",
+    "bot",
+    "spotify",
+    "youtube"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@discordjs/voice": "^0.19.0",
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.4.7",
+    "ffmpeg-static": "^5.2.0",
+    "opusscript": "^0.0.8",
+    "play-dl": "^1.9.7",
+    "spotify-web-api-node": "^5.0.2",
+    "yt-dlp-wrap": "^2.3.12"
+  }
+}
